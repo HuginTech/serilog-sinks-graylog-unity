@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="15.0">
+<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="15.0">
     <PropertyGroup>
         <LangVersion>11.0</LangVersion>
     </PropertyGroup>
@@ -50,9 +50,7 @@
     </ItemGroup>
 
     <ItemGroup Condition="('$(TargetFramework)'=='netstandard2.0')">
-      <PackageReference Include="System.Text.Json" Version="7.0.2"/>
       <PackageReference Include="System.Memory" Version="4.5.5"/>
-      <PackageReference Include="System.Text.Encoding" Version="4.3.0"/>
     </ItemGroup>
 
     <ItemGroup>

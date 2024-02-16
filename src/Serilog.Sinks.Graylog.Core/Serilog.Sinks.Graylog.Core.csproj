@@ -8,19 +8,17 @@
         <DebugType>full</DebugType>
         <Nullable>enable</Nullable>
         <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-        <WarningsAsErrors/>
+        <WarningsAsErrors />
         <SignAssembly>true</SignAssembly>
         <AssemblyOriginatorKeyFile>key.snk</AssemblyOriginatorKeyFile>
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Serilog" Version="2.11.0"/>
+        <PackageReference Include="Serilog" Version="2.11.0" />
     </ItemGroup>
 
     <ItemGroup Condition="('$(TargetFramework)'=='netstandard2.0')">
-        <PackageReference Include="System.Text.Json" Version="7.0.2"/>
-        <PackageReference Include="System.Memory" Version="4.5.5"/>
-        <PackageReference Include="System.Text.Encoding" Version="4.3.0"/>
+        <PackageReference Include="System.Memory" Version="4.5.5" />
     </ItemGroup>
 
 </Project>

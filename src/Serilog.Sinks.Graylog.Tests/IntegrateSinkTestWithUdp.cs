@@ -6,8 +6,6 @@ using Serilog.Sinks.Graylog.Tests.ComplexIntegrationTest;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -35,11 +33,7 @@ namespace Serilog.Sinks.Graylog.Tests
                 HostnameOrAddress = "msa-edor02-lg01",
                 Port = 12209,
                 UseGzip = false,
-                JsonSerializerOptions = new JsonSerializerOptions
-                {
-                    WriteIndented = true,
-                    Converters = { new JsonStringEnumConverter() }
-                },
+                JsonPrettyPrint = true,
                 TransportType = TransportType.Udp
             });
 
@@ -82,11 +76,7 @@ namespace Serilog.Sinks.Graylog.Tests
                 Port = 12209,
                 UseGzip = false,
                 ParseArrayValues = true,
-                JsonSerializerOptions = new JsonSerializerOptions
-                {
-                    WriteIndented = true,
-                    Converters = { new JsonStringEnumConverter() }
-                },
+                JsonPrettyPrint = true,
                 TransportType = TransportType.Udp
             });
 
@@ -137,11 +127,7 @@ namespace Serilog.Sinks.Graylog.Tests
                 UseGzip = false,
                 ParseArrayValues = true,
                 IncludeMessageTemplate = true,
-                JsonSerializerOptions = new JsonSerializerOptions
-                {
-                    WriteIndented = true,
-                    Converters = { new JsonStringEnumConverter() }
-                },
+                JsonPrettyPrint = true,
                 TransportType = TransportType.Udp
             });
 
@@ -188,10 +174,7 @@ namespace Serilog.Sinks.Graylog.Tests
                 UseGzip = false,
                 ParseArrayValues = false,
                 IncludeMessageTemplate = true,
-                JsonSerializerOptions = new JsonSerializerOptions
-                {
-                    WriteIndented = true,
-                },
+                JsonPrettyPrint = true,
                 TransportType = TransportType.Udp
             });
 

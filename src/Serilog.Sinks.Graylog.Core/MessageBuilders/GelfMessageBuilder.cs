@@ -6,8 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text.Json;
-using System.Text.Json.Nodes;
+using Defective.JSON;
 
 namespace Serilog.Sinks.Graylog.Core.MessageBuilders
 {
@@ -40,25 +39,23 @@ namespace Serilog.Sinks.Graylog.Core.MessageBuilders
         /// </summary>
         /// <param name="logEvent">The log event.</param>
         /// <returns></returns>
-        public virtual JsonObject Build(LogEvent logEvent)
+        public virtual JSONObject Build(LogEvent logEvent)
         {
             string message = logEvent.RenderMessage();
             string shortMessage = message.Truncate(Options.ShortMessageMaxLength);
 
-            var jsonObject = new JsonObject
-            {
-                ["version"] = DefaultGelfVersion,
-                ["host"] = Options.HostnameOverride ?? _hostName,
-                ["short_message"] = shortMessage,
-                ["timestamp"] = logEvent.Timestamp.ConvertToNix(),
-                ["level"] = LogLevelMapper.GetMappedLevel(logEvent.Level),
-                ["_stringLevel"] = logEvent.Level.ToString(),
-                ["_facility"] = Options.Facility
-            };
+            var jsonObject = new JSONObject();
+            jsonObject.AddField("version", DefaultGelfVersion);
+            jsonObject.AddField("host", Options.HostnameOverride ?? _hostName);
+            jsonObject.AddField("short_message", shortMessage);
+            jsonObject.AddField("timestamp", logEvent.Timestamp.ConvertToNix());
+            jsonObject.AddField("level", LogLevelMapper.GetMappedLevel(logEvent.Level));
+            jsonObject.AddField("_stringLevel", logEvent.Level.ToString());
+            jsonObject.AddField("_facility", Options.Facility!);
 
             if (message.Length > Options.ShortMessageMaxLength)
             {
-                jsonObject.Add("full_message", message);
+                jsonObject.AddField("full_message", message);
             }
 
             foreach (KeyValuePair<string, LogEventPropertyValue> property in logEvent.Properties)
@@ -80,13 +77,13 @@ namespace Serilog.Sinks.Graylog.Core.MessageBuilders
             {
                 string messageTemplate = logEvent.MessageTemplate.Text;
 
-                jsonObject.Add($"_{Options.MessageTemplateFieldName}", messageTemplate);
+                jsonObject.AddField($"_{Options.MessageTemplateFieldName}", messageTemplate);
             }
 
             return jsonObject;
         }
 
-        private void AddAdditionalField(JsonObject jObject,
+        private void AddAdditionalField(JSONObject jObject,
                                         KeyValuePair<string, LogEventPropertyValue> property,
                                         string memberPath = "")
         {
@@ -109,20 +106,29 @@ namespace Serilog.Sinks.Graylog.Core.MessageBuilders
 
                     if (scalarValue.Value == null)
                     {
-                        jObject.Add(key, null);
-
+                        jObject.AddField(key, JSONObject.nullObject);
                         break;
                     }
 
-                    var node = JsonSerializer.SerializeToNode(scalarValue.Value, Options.JsonSerializerOptions);
-
-                    jObject.Add(key, node);
-
+                    long l;
+                    double d;
+                    if (long.TryParse(scalarValue.Value.ToString(), out l))
+                    {
+                        jObject.AddField(key, l);
+                    }
+                    else if (double.TryParse(scalarValue.Value.ToString(), out d))
+                    {
+                        jObject.AddField(key, d);
+                    }
+                    else
+                    {
+                        jObject.AddField(key, scalarValue.Value.ToString());
+                    }
                     break;
                 case SequenceValue sequenceValue:
                     var sequenceValueString = RenderPropertyValue(sequenceValue);
 
-                    jObject.Add(key, sequenceValueString);
+                    jObject.AddField(key, sequenceValueString);
 
                     if (Options.ParseArrayValues)
                     {
@@ -157,10 +163,12 @@ namespace Serilog.Sinks.Graylog.Core.MessageBuilders
                         }
                     } else
                     {
-                        var dict = dictionaryValue.Elements.ToDictionary(k => k.Key.Value, v => RenderPropertyValue(v.Value));
-                        var stringDictionary = JsonSerializer.SerializeToNode(dict, Options.JsonSerializerOptions);
+          
+                        var dict = dictionaryValue.Elements.ToDictionary(k => k.Key.Value.ToString()!, v => RenderPropertyValue(v.Value));
 
-                        jObject.Add(key, stringDictionary);
+                        var stringDictionary = JSONObject.Create(dict);
+
+                        jObject.AddField(key, stringDictionary);
                     }
 
                     break;

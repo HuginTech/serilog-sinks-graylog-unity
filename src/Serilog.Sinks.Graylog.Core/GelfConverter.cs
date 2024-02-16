@@ -2,13 +2,13 @@ using Serilog.Events;
 using Serilog.Sinks.Graylog.Core.MessageBuilders;
 using System;
 using System.Collections.Generic;
-using System.Text.Json.Nodes;
+using Defective.JSON;
 
 namespace Serilog.Sinks.Graylog.Core
 {
     public interface IGelfConverter
     {
-        JsonObject GetGelfJson(LogEvent logEvent);
+        JSONObject GetGelfJson(LogEvent logEvent);
     }
 
     public class GelfConverter : IGelfConverter
@@ -20,7 +20,7 @@ namespace Serilog.Sinks.Graylog.Core
             _messageBuilders = messageBuilders;
         }
 
-        public JsonObject GetGelfJson(LogEvent logEvent)
+        public JSONObject GetGelfJson(LogEvent logEvent)
         {
             IMessageBuilder builder = logEvent.Exception != null
                 ? _messageBuilders[BuilderType.Exception].Value

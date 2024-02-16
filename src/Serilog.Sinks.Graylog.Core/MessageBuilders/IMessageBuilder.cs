@@ -1,5 +1,5 @@
 using Serilog.Events;
-using System.Text.Json.Nodes;
+using Defective.JSON;
 
 namespace Serilog.Sinks.Graylog.Core.MessageBuilders
 {
@@ -13,7 +13,7 @@ namespace Serilog.Sinks.Graylog.Core.MessageBuilders
         /// </summary>
         /// <param name="logEvent">The log event.</param>
         /// <returns></returns>
-        JsonObject Build(LogEvent logEvent);
+        JSONObject Build(LogEvent logEvent);
     }
 
     /// <summary>

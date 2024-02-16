@@ -1,7 +1,7 @@
 using Serilog.Events;
 using System;
 using System.Text;
-using System.Text.Json.Nodes;
+using Defective.JSON;
 
 namespace Serilog.Sinks.Graylog.Core.MessageBuilders
 {
@@ -23,7 +23,7 @@ namespace Serilog.Sinks.Graylog.Core.MessageBuilders
         {
         }
 
-        public override JsonObject Build(LogEvent logEvent)
+        public override JSONObject Build(LogEvent logEvent)
         {
             Tuple<string, string?> excMessageTuple = GetExceptionMessages(logEvent.Exception);
             string exceptionDetail = excMessageTuple.Item1;

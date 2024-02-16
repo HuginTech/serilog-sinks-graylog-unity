@@ -1,4 +1,4 @@
-﻿using Serilog.Debugging;
+using Serilog.Debugging;
 using Serilog.Events;
 using Serilog.Sinks.Graylog.Core;
 using Serilog.Sinks.Graylog.Core.Transport;
@@ -6,8 +6,8 @@ using Serilog.Sinks.PeriodicBatching;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.Json.Nodes;
 using System.Threading.Tasks;
+using Defective.JSON;
 
 namespace Serilog.Sinks.Graylog.Batching
 {
@@ -15,12 +15,14 @@ namespace Serilog.Sinks.Graylog.Batching
     {
         private readonly Lazy<ITransport> _transport;
         private readonly Lazy<IGelfConverter> _converter;
+        private readonly bool _jsonprettyprint;
 
         public PeriodicBatchingGraylogSink(BatchingGraylogSinkOptions options)
         {
             ISinkComponentsBuilder sinkComponentsBuilder = new SinkComponentsBuilder(options);
             _transport = new Lazy<ITransport>(sinkComponentsBuilder.MakeTransport);
             _converter = new Lazy<IGelfConverter>(sinkComponentsBuilder.MakeGelfConverter);
+            _jsonprettyprint = options.JsonPrettyPrint;
         }
 
         public Task OnEmptyBatchAsync()
@@ -34,8 +36,8 @@ namespace Serilog.Sinks.Graylog.Batching
             {
                 IEnumerable<Task> sendTasks = batch.Select(async logEvent =>
                 {
-                    JsonObject json = _converter.Value.GetGelfJson(logEvent);
-                    await _transport.Value.Send(json.ToString()).ConfigureAwait(false);
+                    JSONObject json = _converter.Value.GetGelfJson(logEvent);
+                    await _transport.Value.Send(json.Print(_jsonprettyprint)).ConfigureAwait(false);
                 });
 
                 return Task.WhenAll(sendTasks);

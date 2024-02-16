@@ -78,8 +78,6 @@ namespace Serilog.Sinks.Graylog
                 HostnameOverride = host,
                 IncludeMessageTemplate = includeMessageTemplate,
                 MessageTemplateFieldName = messageTemplateFieldName,
-                UsernameInHttp = usernameInHttp,
-                PasswordInHttp = passwordInHttp,
                 ParseArrayValues = parseArrayValues,
                 UseGzip = useGzip
             };

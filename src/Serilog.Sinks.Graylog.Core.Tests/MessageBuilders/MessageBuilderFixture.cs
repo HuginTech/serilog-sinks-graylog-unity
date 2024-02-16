@@ -39,7 +39,7 @@ namespace Serilog.Sinks.Graylog.Core.Tests.MessageBuilders
             //act
             LogEvent logEvent = LogEventSource.GetSimpleLogEvent(date);
             var actual = messageBuilder.Build(logEvent);
-            string actualHost = actual["host"].AsValue().ToString();
+            string actualHost = actual.GetField("host").stringValue;
 
             //assert
             Assert.Equal(expectedHost, actualHost);

@@ -1,4 +1,4 @@
-﻿using Serilog.Debugging;
+using Serilog.Debugging;
 using System;
 using System.IO;
 using System.Linq;
@@ -33,11 +33,7 @@ namespace Serilog.Sinks.Graylog.Core.Transport.Tcp
         {
             await EnsureConnection().ConfigureAwait(false);
 
-#if NETSTANDARD2_0
             await _stream!.WriteAsync(payload, 0, payload.Length).ConfigureAwait(false);
-#else
-            await _stream!.WriteAsync(payload).ConfigureAwait(false);
-#endif
 
             await _stream.FlushAsync().ConfigureAwait(false);
         }

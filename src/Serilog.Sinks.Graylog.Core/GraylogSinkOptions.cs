@@ -2,7 +2,6 @@ using System;
 using Serilog.Events;
 using Serilog.Sinks.Graylog.Core.Helpers;
 using Serilog.Sinks.Graylog.Core.Transport;
-using System.Text.Json;
 // ReSharper disable InconsistentNaming
 // ReSharper disable MemberCanBePrivate.Global
 // ReSharper disable PublicConstructorInAbstractClass
@@ -32,11 +31,6 @@ namespace Serilog.Sinks.Graylog.Core
 
         public const string DefaultMessageTemplateFieldName = "message_template";
 
-        // ReSharper disable once MemberCanBePrivate.Global
-        public static readonly JsonSerializerOptions DefaultSerializerSettings = new()
-        {
-            WriteIndented = false,
-        };
 
         public GraylogSinkOptionsBase()
         {
@@ -50,11 +44,11 @@ namespace Serilog.Sinks.Graylog.Core
             IncludeMessageTemplate = false;
             ExcludeMessageTemplateProperties = false;
             MessageTemplateFieldName = DefaultMessageTemplateFieldName;
-            JsonSerializerOptions = DefaultSerializerSettings;
             ParseArrayValues = false;
             //use gzip by default
             UseGzip = true;
             Port = DefaultPort;
+            JsonPrettyPrint = false;
         }
 
         /// <summary>
@@ -187,20 +181,11 @@ namespace Serilog.Sinks.Graylog.Core
         /// </summary>
         public bool UseSsl { get; set; }
 
-        /// <summary>
-        /// JsonSerializer options
-        /// </summary>
-        public JsonSerializerOptions JsonSerializerOptions { get; set; }
 
         /// <summary>
-        /// Gets or sets the username in http
+        /// Pretty print JSON
         /// </summary>
-        public string? UsernameInHttp { get; set; }
-
-        /// <summary>
-        /// Gets or sets the password in http
-        /// </summary>
-        public string? PasswordInHttp { get; set; }
+        public bool JsonPrettyPrint { get; set; }
 
         /// <summary>
         /// For custom implementations of ITransport
