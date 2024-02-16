@@ -5,7 +5,7 @@
     </PropertyGroup>
 
     <PropertyGroup>
-        <TargetFrameworks>net7.0;net6.0;netstandard2.0</TargetFrameworks>
+        <TargetFrameworks>net4.6.2;netstandard2.0</TargetFrameworks>
         <!--Hack to include referenced project as content dll -->
         <TargetsForTfmSpecificBuildOutput>$(TargetsForTfmSpecificBuildOutput);CopyProjectReferencesToPackage</TargetsForTfmSpecificBuildOutput>
 
@@ -13,7 +13,7 @@
         <DebugType>full</DebugType>
         <Nullable>enable</Nullable>
         <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-        <WarningsAsErrors/>
+        <WarningsAsErrors />
         <PackageId>Serilog.Sinks.Graylog.Batching</PackageId>
         <Title>Serilog.Sinks.Graylog.Batching</Title>
         <Authors>Anton Volkov</Authors>
@@ -39,11 +39,11 @@
 
     </PropertyGroup>
     <ItemGroup>
-        <EmbeddedResource Include="**\*.resx"/>
+        <EmbeddedResource Include="**\*.resx" />
 
-        <None Include="..\serilog-sink-nuget.png" Pack="true" Visible="false" PackagePath=""/>
-        <None Remove="*.ncrunchproject"/>
-        <None Include="sign.snk"/>
+        <None Include="..\serilog-sink-nuget.png" Pack="true" Visible="false" PackagePath="" />
+        <None Remove="*.ncrunchproject" />
+        <None Include="sign.snk" />
     </ItemGroup>
 
     <ItemGroup>
@@ -51,13 +51,13 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Serilog.Sinks.Graylog.Core\Serilog.Sinks.Graylog.Core.csproj" PrivateAssets="all"/>
+        <ProjectReference Include="..\Serilog.Sinks.Graylog.Core\Serilog.Sinks.Graylog.Core.csproj" PrivateAssets="all" />
     </ItemGroup>
 
     <!--Hack to include referenced project as content dll -->
     <Target Name="CopyProjectReferencesToPackage" DependsOnTargets="ResolveReferences">
         <ItemGroup>
-            <BuildOutputInPackage Include="@(ReferenceCopyLocalPaths-&gt;WithMetadataValue('ReferenceSourceTarget', 'ProjectReference'))"/>
+            <BuildOutputInPackage Include="@(ReferenceCopyLocalPaths-&gt;WithMetadataValue('ReferenceSourceTarget', 'ProjectReference'))" />
         </ItemGroup>
     </Target>
 

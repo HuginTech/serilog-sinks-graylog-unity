@@ -1,6 +1,6 @@
-﻿<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="15.0">
+<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="15.0">
   <PropertyGroup>
-    <TargetFrameworks>net7.0;net6.0</TargetFrameworks>
+    <TargetFrameworks>net6</TargetFrameworks>
     <DebugType>full</DebugType>
   </PropertyGroup>
   <ItemGroup>
