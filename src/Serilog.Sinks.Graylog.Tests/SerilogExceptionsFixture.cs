@@ -19,9 +19,9 @@ namespace Serilog.Sinks.Graylog.Tests
                 {
                     ShortMessageMaxLength = 50,
                     MinimumLogEventLevel = LogEventLevel.Information,
-                    TransportType = TransportType.Http,
+                    TransportType = TransportType.Tcp,
                     Facility = "VolkovTestFacility",
-                    HostnameOrAddress = "http://logs.aeroclub.int",
+                    HostnameOrAddress = "127.0.0.1",
                     Port = 12201
                 });
 

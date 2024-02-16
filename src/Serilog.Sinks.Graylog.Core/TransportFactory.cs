@@ -1,7 +1,6 @@
-﻿using Serilog.Sinks.Graylog.Core.Helpers;
+using Serilog.Sinks.Graylog.Core.Helpers;
 using Serilog.Sinks.Graylog.Core.MessageBuilders;
 using Serilog.Sinks.Graylog.Core.Transport;
-using Serilog.Sinks.Graylog.Core.Transport.Http;
 using Serilog.Sinks.Graylog.Core.Transport.Tcp;
 using Serilog.Sinks.Graylog.Core.Transport.Udp;
 using System;
@@ -53,10 +52,6 @@ namespace Serilog.Sinks.Graylog.Core
                     var udpTransport = new UdpTransport(udpClient, chunkConverter, _options);
 
                     return udpTransport;
-                case SinkTransportType.Http:
-                    var httpClient = new HttpTransportClient(_options);
-
-                    return new HttpTransport(httpClient);
                 case SinkTransportType.Tcp:
                     var tcpClient = new TcpTransportClient(_options, new DnsWrapper());
 
