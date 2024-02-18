@@ -1,5 +1,3 @@
-﻿using System;
-using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading.Tasks;
@@ -38,7 +36,13 @@ namespace Serilog.Sinks.Graylog.Core.Transport.Udp
                     SelfLog.WriteLine("IP address could not be resolved.");
                     return;
                 }
-                _ipEndPoint = new IPEndPoint(ipAddress, _options.Port.GetValueOrDefault());
+
+                lock (this)
+                {
+                    if (_ipEndPoint == null)
+
+                        _ipEndPoint = new IPEndPoint(ipAddress, _options.Port.GetValueOrDefault());
+                }
             }
         }
 
