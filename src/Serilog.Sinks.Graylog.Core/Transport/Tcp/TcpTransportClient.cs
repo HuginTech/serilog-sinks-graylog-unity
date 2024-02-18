@@ -26,24 +26,16 @@ namespace Serilog.Sinks.Graylog.Core.Transport.Tcp
             _dnsInfoProvider = dnsInfoProvider;
 
             _client = new TcpClient();
+            _client.LingerState = new LingerOption(true, 30);
+            Connect().Wait();
         }
 
         /// <inheritdoc />
         public async Task Send(byte[] payload)
         {
-            await EnsureConnection().ConfigureAwait(false);
-
             await _stream!.WriteAsync(payload, 0, payload.Length).ConfigureAwait(false);
 
             await _stream.FlushAsync().ConfigureAwait(false);
-        }
-
-        private async Task EnsureConnection()
-        {
-            if (!_client.Connected)
-            {
-                await Connect().ConfigureAwait(false);
-            }
         }
 
         private async Task Connect()
@@ -58,7 +50,7 @@ namespace Serilog.Sinks.Graylog.Core.Transport.Tcp
             int port = _options.Port.GetValueOrDefault(DefaultPort);
             string? sslHost = _options.UseSsl ? _options.HostnameOrAddress : null;
 
-            await _client.ConnectAsync(_address, port).ConfigureAwait(false);
+            await _client.ConnectAsync(_address, port);
 
             _stream = _client.GetStream();
 
@@ -66,7 +58,7 @@ namespace Serilog.Sinks.Graylog.Core.Transport.Tcp
             {
                 var _sslStream = new SslStream(_stream, false);
 
-                await _sslStream.AuthenticateAsClientAsync(sslHost).ConfigureAwait(false);
+                await _sslStream.AuthenticateAsClientAsync(sslHost);
 
                 if (_sslStream.RemoteCertificate != null)
                 {
