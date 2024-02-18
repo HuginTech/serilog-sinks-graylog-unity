@@ -292,6 +292,8 @@ namespace Defective.JSON {
 			var jsonObject = Create();
 			jsonObject.type = Type.String;
 			jsonObject.stringValue = value;
+            if (jsonObject.stringValue != null )
+                jsonObject.stringValue = jsonObject.stringValue.Replace("\\", "\\\\").Replace("\r", "").Replace("\n", "\\n");
 			return jsonObject;
 		}
 
